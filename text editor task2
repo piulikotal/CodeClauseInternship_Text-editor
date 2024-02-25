@@ -1,1 +1,49 @@
+#coded by piuli kotal
+
+import tkinter as tk
+from tkinter import filedialog
+
+class TextEditor:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Simple Text Editor")
+        self.text_area = tk.Text(self.master)
+        self.text_area.pack(expand=True, fill="both")
+        self.create_menu()
+
+    def create_menu(self):
+        menubar = tk.Menu(self.master)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="New", command=self.new_file)
+        file_menu.add_command(label="Open", command=self.open_file)
+        file_menu.add_command(label="Save", command=self.save_file)
+        file_menu.add_command(label="Exit", command=self.master.quit)
+        menubar.add_cascade(label="File", menu=file_menu)
+        self.master.config(menu=menubar)
+
+    def new_file(self):
+        self.text_area.delete(1.0, tk.END)
+
+    def open_file(self):
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            with open(file_path, "r") as file:
+                text = file.read()
+                self.text_area.delete(1.0, tk.END)
+                self.text_area.insert(1.0, text)
+
+    def save_file(self):
+        text_content = self.text_area.get(1.0, tk.END)
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt")
+        if file_path:
+            with open(file_path, "w") as file:
+                file.write(text_content)
+
+def main():
+    root = tk.Tk()
+    app = TextEditor(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
 
